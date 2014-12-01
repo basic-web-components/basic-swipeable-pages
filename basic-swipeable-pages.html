@@ -9,8 +9,13 @@ Let the user swipe horizontally with swipe gesture or mouse.
 Polymer({
 
   ready: function() {
+    
     this.super();
-    this.$.spreadContainer.style.touchAction = "pan-y";
+
+    var containerStyle = this.$.spreadContainer.style;
+    containerStyle.touchAction = "pan-y";
+    containerStyle.webkitTransition = "-webkit-transform 0.3s ease-out";
+    containerStyle.transition = "transform 0.3s ease-out";
 
     PolymerGestures.addEventListener( this, "track", function( event ) {
       this._handleSwipe( event );
@@ -18,22 +23,13 @@ Polymer({
   },
 
   _handleSwipe: function( event ) {
-    console.log( event.dx );
-    // var isFirstPage = (this.selected === 0);
-    // var isLastPage  = (this.selected === (this.pageCount - 1));
-
-    // var userIsSwipingLeftwards = (event.dx < 0);
-    // var userIsSwipingRightwards = (event.dx > 0);
-
-    // var tryingToSwipeToLeftOfFirstPage = userIsSwipingRightwards && isFirstPage;
-    // var tryingToSwipeToRightOfLastPage = userIsSwipingLeftwards && isLastPage;
-
-    // var tryingToSwipeToOutOfBoundsPage = tryingToSwipeToLeftOfFirstPage || tryingToSwipeToRightOfLastPage;
-    
-    // if (!tryingToSwipeToOutOfBoundsPage){
-    //   var position = -(this.selected - (event.dx / this.pageWidth)) * 100 / this.pageCount;
-    //   moveToPosition(position, this);
-    // }
+    var containerStyle = this.$.spreadContainer.style;
+    var transform = containerStyle.transform;
+    var match = /translateX\((-?\d+)px\)/.exec( transform );
+    var x = match ? parseInt( match[1] ) : 0;
+    console.log( x + " " + event.dx );
+    x += event.dx;
+    this.$.spreadContainer.style.transform = "translateX(" + x + "px)";
   }
 
 });
