@@ -1,0 +1,41 @@
+<!--
+Let the user swipe horizontally with swipe gesture or mouse.
+-->
+
+<link rel="import" href="../basic-spread/basic-spread.html">
+
+<polymer-element name="basic-swipeable-pages" extends="basic-spread">
+<script>
+Polymer({
+
+  ready: function() {
+    this.super();
+    this.$.spreadContainer.style.touchAction = "pan-y";
+
+    PolymerGestures.addEventListener( this, "track", function( event ) {
+      this._handleSwipe( event );
+    }.bind( this ));
+  },
+
+  _handleSwipe: function( event ) {
+    console.log( event.dx );
+    // var isFirstPage = (this.selected === 0);
+    // var isLastPage  = (this.selected === (this.pageCount - 1));
+
+    // var userIsSwipingLeftwards = (event.dx < 0);
+    // var userIsSwipingRightwards = (event.dx > 0);
+
+    // var tryingToSwipeToLeftOfFirstPage = userIsSwipingRightwards && isFirstPage;
+    // var tryingToSwipeToRightOfLastPage = userIsSwipingLeftwards && isLastPage;
+
+    // var tryingToSwipeToOutOfBoundsPage = tryingToSwipeToLeftOfFirstPage || tryingToSwipeToRightOfLastPage;
+    
+    // if (!tryingToSwipeToOutOfBoundsPage){
+    //   var position = -(this.selected - (event.dx / this.pageWidth)) * 100 / this.pageCount;
+    //   moveToPosition(position, this);
+    // }
+  }
+
+});
+</script>
+</polymer-element>
