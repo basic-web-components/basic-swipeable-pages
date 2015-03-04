@@ -12,7 +12,7 @@ Polymer({
     
     this.super();
 
-    var containerStyle = this.$.spreadContainer.style;
+    var containerStyle = this.$.spreadStack.style;
     containerStyle.touchAction = "pan-y";
     containerStyle.webkitTransition = "-webkit-transform 0.3s ease-out";
     containerStyle.transition = "transform 0.3s ease-out";
@@ -23,13 +23,13 @@ Polymer({
   },
 
   _handleSwipe: function( event ) {
-    var containerStyle = this.$.spreadContainer.style;
+    var containerStyle = this.$.spreadStack.style;
     var transform = containerStyle.transform;
     var match = /translateX\((-?\d+)px\)/.exec( transform );
     var x = match ? parseInt( match[1] ) : 0;
     console.log( x + " " + event.dx );
     x += event.dx;
-    this.$.spreadContainer.style.transform = "translateX(" + x + "px)";
+    this.$.spreadStack.style.transform = "translateX(" + x + "px)";
   }
 
 });
