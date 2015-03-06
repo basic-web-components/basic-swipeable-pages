@@ -22,11 +22,14 @@ Let the user swipe horizontally with swipe gesture or mouse.
     height: 300px;
     touch-action: none;
     width: 300%;
+    will-change: transform;
   }
 
   #swipeContainer.snapping {
-    -webkit-transition: -webkit-transform 0.2s cubic-bezier(.48,0,.88,1.48);
-    transition: transform 0.2s cubic-bezier(.48,0,.88,1.48);  /* was ease-out */
+    -webkit-transition: -webkit-transform 0.2s ease-out;
+    transition: transform 0.2s ease-out;
+    /*-webkit-transition: -webkit-transform 0.2s cubic-bezier(.48,0,.88,1.48);*/
+    /*transition: transform 0.2s cubic-bezier(.48,0,.88,1.48);*/
   }
 
   polyfill-next-selector {
@@ -73,14 +76,17 @@ Polymer({
     this._panTo(offset + delta);
   },
 
+  _refresh: function() {
+    var transform = 'translateX(' + this._offset + 'px)';
+    this.$.swipeContainer.style.webkitTransform = transform;      
+    this.$.swipeContainer.style.transform = transform;    
+  },
+
   _panTo: function(x) {
     var count = this.children.length;
     var maxOffset = (count - 1) * this.offsetWidth;
-    x = Math.max(Math.min(x, 0), -maxOffset);
-    var transform = 'translateX(' + x + 'px)';
-    this.$.swipeContainer.style.webkitTransform = transform;      
-    this.$.swipeContainer.style.transform = transform;
-    this._offset = x;
+    this._offset = Math.max(Math.min(x, 0), -maxOffset);
+    requestAnimationFrame(this._refresh.bind(this));
   },
 
   _trackTo: function(x) {
