@@ -4,33 +4,64 @@ Let the user swipe horizontally with swipe gesture or mouse.
 
 <link rel="import" href="../basic-spread/basic-spread.html">
 
-<polymer-element name="basic-swipeable-pages" extends="basic-spread">
+<polymer-element name="basic-swipeable-pages">
+<template>
+  <style>
+  :host {
+    background: #f8f8f8;
+    display: block;
+    height: 300px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  #swipeContainer {
+    display: -webkit-flex;
+    display: flex;
+    height: 300px;
+    touch-action: none;
+    /*-webkit-transition: -webkit-transform 0.3s ease-out;*/
+    /*transition: transform 0.3s ease-out;*/
+    width: 300%;
+  }
+
+  polyfill-next-selector {
+    content: '#swipeContainer > *';
+  }
+  ::content > * {
+    width: 100%;
+    touch-action: none;
+  }
+  </style>
+  <div id="swipeContainer">
+    <content></content>
+  </div>
+</template>
 <script>
 Polymer({
 
   ready: function() {
-    
-    this.super();
-
-    var containerStyle = this.$.spreadStack.style;
-    containerStyle.touchAction = "pan-y";
-    containerStyle.webkitTransition = "-webkit-transform 0.3s ease-out";
-    containerStyle.transition = "transform 0.3s ease-out";
-
-    PolymerGestures.addEventListener( this, "track", function( event ) {
-      this._handleSwipe( event );
-    }.bind( this ));
+    this.addEventListener('touchstart', function(event) {
+      this._previousX = event.touches[0].clientX;
+      event.preventDefault();
+    }.bind(this));
+    this.addEventListener('touchmove', function(event) {
+      var currentX = event.touches[0].clientX;
+      var previousX = this._previousX || currentX;
+      var deltaX = currentX - previousX;
+      var offset = Math.min(this._offset + deltaX, 0);
+      var transform = 'translateX(' + offset + 'px)';
+      console.log(transform);
+      this.$.swipeContainer.style.webkitTransform = transform;      
+      this.$.swipeContainer.style.transform = transform;
+      this._previousX = currentX;
+      this._offset = offset;
+      event.preventDefault();
+    }.bind(this));
   },
 
-  _handleSwipe: function( event ) {
-    var containerStyle = this.$.spreadStack.style;
-    var transform = containerStyle.transform;
-    var match = /translateX\((-?\d+)px\)/.exec( transform );
-    var x = match ? parseInt( match[1] ) : 0;
-    console.log( x + " " + event.dx );
-    x += event.dx;
-    this.$.spreadStack.style.transform = "translateX(" + x + "px)";
-  }
+  _offset: 0
 
 });
 </script>
