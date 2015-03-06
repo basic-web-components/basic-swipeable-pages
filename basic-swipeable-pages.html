@@ -68,14 +68,15 @@ Polymer({
     // Handle mod of a negative number.
     var edgeX = ((offset % width) + width) % width;
     var snapLeft = (edgeX < width / 2);
-    console.log(offset + ' ' + edgeX + ' ' + snapLeft);
     var delta = snapLeft ? -edgeX : (width - edgeX);
     this._showTransition(true);
     this._panTo(offset + delta);
   },
 
   _panTo: function(x) {
-    x = Math.min(x, 0);
+    var count = this.children.length;
+    var maxOffset = (count - 1) * this.offsetWidth;
+    x = Math.max(Math.min(x, 0), -maxOffset);
     var transform = 'translateX(' + x + 'px)';
     this.$.swipeContainer.style.webkitTransform = transform;      
     this.$.swipeContainer.style.transform = transform;
@@ -84,7 +85,6 @@ Polymer({
 
   _trackTo: function(x) {
     var deltaX = this._previousX ? x - this._previousX : 0;
-    // console.log(x + ' ' + this._offset + ' ' + deltaX);
     this._panTo(this._offset + deltaX);
     this._previousX = x;    
   },
