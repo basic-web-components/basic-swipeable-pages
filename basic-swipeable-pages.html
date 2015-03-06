@@ -9,16 +9,19 @@ Let the user swipe horizontally with swipe gesture or mouse.
   <style>
   :host {
     background: #f8f8f8;
-    display: block;
-    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
     overflow: hidden;
-    width: 100%;
   }
 
   #swipeContainer {
     display: -webkit-flex;
     display: flex;
-    height: 100%;
+    -webkit-flex: 1;
+    flex: 1;
+    position: relative;
     touch-action: none;
     width: 300%;
     will-change: transform;

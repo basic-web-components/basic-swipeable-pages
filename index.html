@@ -8,6 +8,10 @@
 <link rel="import" href="basic-swipeable-pages.html">
 
 <style>
+html {
+  height: 100%;
+}
+
 body,
 button,
 input {
@@ -16,11 +20,21 @@ input {
 }
 
 body {
+  display: -webkit-flex;
+  display: flex;
+  height: 100%;
+  -webkit-flex-direction: column;
+  flex-direction: column;
   margin: 0;
 }
 
 basic-framed-content {
   padding: 2em;
+}
+
+basic-swipeable-pages {
+  -webkit-flex: 1;
+  flex: 1;
 }
 </style>
 
