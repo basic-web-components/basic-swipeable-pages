@@ -13,7 +13,7 @@ Let the user swipe horizontally with swipe gesture or mouse.
     height: 300px;
     overflow: hidden;
     width: 100%;
-    max-width: 400px;
+    /* max-width: 400px; */
   }
 
   #swipeContainer {
@@ -21,9 +21,12 @@ Let the user swipe horizontally with swipe gesture or mouse.
     display: flex;
     height: 300px;
     touch-action: none;
-    /*-webkit-transition: -webkit-transform 0.3s ease-out;*/
-    /*transition: transform 0.3s ease-out;*/
     width: 300%;
+  }
+
+  #swipeContainer.snapping {
+    -webkit-transition: -webkit-transform 0.2s cubic-bezier(.48,0,.88,1.48);
+    transition: transform 0.2s cubic-bezier(.48,0,.88,1.48);  /* was ease-out */
   }
 
   polyfill-next-selector {
@@ -43,22 +46,51 @@ Polymer({
 
   ready: function() {
     this.addEventListener('touchstart', function(event) {
-      this._previousX = event.touches[0].clientX;
+      this._showTransition(false);
+      this._startX = event.changedTouches[0].clientX;
+      this._previousX = this._startX;
       event.preventDefault();
     }.bind(this));
     this.addEventListener('touchmove', function(event) {
-      var currentX = event.touches[0].clientX;
-      var previousX = this._previousX || currentX;
-      var deltaX = currentX - previousX;
-      var offset = Math.min(this._offset + deltaX, 0);
-      var transform = 'translateX(' + offset + 'px)';
-      console.log(transform);
-      this.$.swipeContainer.style.webkitTransform = transform;      
-      this.$.swipeContainer.style.transform = transform;
-      this._previousX = currentX;
-      this._offset = offset;
+      this._trackTo(event.changedTouches[0].clientX);
       event.preventDefault();
     }.bind(this));
+    this.addEventListener('touchend', function() {
+      this._trackTo(event.changedTouches[0].clientX);
+      this.snap();
+      event.preventDefault();
+    })
+  },
+
+  snap: function() {
+    var width = this.offsetWidth;
+    var offset = this._offset;
+    // Handle mod of a negative number.
+    var edgeX = ((offset % width) + width) % width;
+    var snapLeft = (edgeX < width / 2);
+    console.log(offset + ' ' + edgeX + ' ' + snapLeft);
+    var delta = snapLeft ? -edgeX : (width - edgeX);
+    this._showTransition(true);
+    this._panTo(offset + delta);
+  },
+
+  _panTo: function(x) {
+    x = Math.min(x, 0);
+    var transform = 'translateX(' + x + 'px)';
+    this.$.swipeContainer.style.webkitTransform = transform;      
+    this.$.swipeContainer.style.transform = transform;
+    this._offset = x;
+  },
+
+  _trackTo: function(x) {
+    var deltaX = this._previousX ? x - this._previousX : 0;
+    // console.log(x + ' ' + this._offset + ' ' + deltaX);
+    this._panTo(this._offset + deltaX);
+    this._previousX = x;    
+  },
+
+  _showTransition: function(on) {
+    this.$.swipeContainer.classList.toggle('snapping', on);
   },
 
   _offset: 0
