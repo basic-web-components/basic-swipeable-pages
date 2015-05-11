@@ -1,11 +1,11 @@
 {
   "name": "<COMPONENT>",
   "description": "<DESCRIPTION>",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "license": "MIT",
   "main": "<COMPONENT>.html",
   "dependencies": {
-    "basic-element": "basic-web-components/basic-element#master"
+    "basic-element": "basic-web-components/basic-element#^0.5.0"
   },
   "devDependencies": {
     "basic-framed-content": "basic-web-components/basic-framed-content#master"
