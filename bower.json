@@ -1,9 +1,9 @@
 {
-  "name": "<COMPONENT>",
-  "description": "<DESCRIPTION>",
+  "name": "basic-swipeable-pages",
+  "description": "basic-swipeable-pages 0.5.0",
   "version": "0.5.0",
   "license": "MIT",
-  "main": "<COMPONENT>.html",
+  "main": "basic-swipeable-pages.html",
   "dependencies": {
     "basic-element": "basic-web-components/basic-element#^0.5.0"
   },
