@@ -11,8 +11,7 @@
     "basic-framed-content": "basic-web-components/basic-framed-content#master"
   },
   "keywords": [
-    "basic-web-components",
-    "web-components"
+    "basic-web-components"
   ],
   "ignore": [
     "**/.*"
